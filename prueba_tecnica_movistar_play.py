@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import requests
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+import re
 from bs4 import BeautifulSoup
 import pandas as pd
 
@@ -182,8 +185,32 @@ def save_to(data):
         pass
     else:
         print('Seleccione una opción valida (1, 2, 3, 4)')
+        
+'''
+En caso de que movistar play comience a agregar series y peliculas seguid deberemos automatizar
+la consulta a la cantidad disponible para luego pasarla en la url (va a ser el max_number of series o movies)
+
+def get_number_of(web_url):
+    from selenium.webdriver.chrome.options import Options 
+    from selenium import webdriver
     
+    webdriver.ChromeOptions()
+
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(r"C:\Users\tadeo\OneDrive\Escritorio\Curso Data Analyst\Python 0\chromedriver.exe", 
+                                    chrome_options=chrome_options) #PATH de chromedriver   
+    response = driver.get(web_url)
     
+    body = driver.execute_script("return document.body")
+    html = body.get_attribute('innerHTML')
+    
+    soup = BeautifulSoup(html, "html.parser")
+    resultado = soup.find("span", { "class" : "textBrackets__3x96A" }).get_text()
+    
+    return resultado
+'''
+
 def main():
     
     '''Programa principal con menu interactivo, las dos url son la api principal de las peliculas y series. 
@@ -191,14 +218,14 @@ def main():
     que puede verse facilmente en movistar play)'''
     
     max_number_of_movies = 7000
-    max_number_of_series = 510
+    max_number_of_series = 550
     
     url_movies = f'https://nrs-a.cdn.telefonica.com/rec_search/29/default/es-AR/content/CHA3439/children?ca_deviceTypes=null%7C401&includeAttributes=ca_requiresPin,ca_blackout_target,ca_blackout_areas&includeRelations=ProductDependencies,Genre,Provider&fields=pid,title,callLetter,channelName,duration,start,end,epgChannelId,channelId,programId,commercializationType,distributor,releaseDate,forbiddenTechnology,images.videoFrame,images.cover,images.landscapeCover,images.banner,images.portraitArt&contentPid=CHA3439&ca_requiresPin=false&orderBy=CONTENT_ORDER&offset=16&limit={max_number_of_movies}&contentTypes=MOV,SER&ca_commercializationType=CATCHUP%7CExternalCATCHUP%7CFreeVOD%7CSVOD%7CTransparentCatchup%7CTVOD%7CUnknown&px_device_type=401&px_is_anonym=true&px_uxr=29.PC.TA_PAGE&px_channel=CHA3439&px_filter=1'
     url_series = f'https://nrs-a.cdn.telefonica.com/rec_search/29/default/es-AR/content/CHA3440/children?ca_deviceTypes=null%7C401&includeAttributes=ca_requiresPin,ca_blackout_target,ca_blackout_areas&includeRelations=ProductDependencies,Genre,Provider&fields=pid,title,callLetter,channelName,duration,start,end,epgChannelId,channelId,programId,commercializationType,distributor,releaseDate,forbiddenTechnology,images.videoFrame,images.cover,images.landscapeCover,images.banner,images.portraitArt&contentPid=CHA3440&ca_requiresPin=false&orderBy=CONTENT_ORDER&offset=16&limit={max_number_of_series}&contentTypes=MOV,SER&ca_commercializationType=CATCHUP%7CExternalCATCHUP%7CFreeVOD%7CSVOD%7CTransparentCatchup%7CTVOD%7CUnknown&px_device_type=401&px_is_anonym=true&px_uxr=29.PC.TA_PAGE&px_channel=CHA3440&px_filter=1'
     
     while True:
         global choice
-        choice = str(input('Seleccione una opción: \n \ 1-Descargar datos de peliculas. \n \ 2-Descargar datos de series. \n \ 3-Exit \n\n'))
+        choice = str(input(' \n \n Seleccione una opción: \n \ 1-Descargar datos de peliculas. \n \ 2-Descargar datos de series. \n \ 3-Exit \n\n'))
         if choice == '1':
             connect(url_movies)
         
